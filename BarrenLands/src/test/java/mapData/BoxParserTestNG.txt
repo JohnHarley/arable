@@ -1,0 +1,64 @@
+package mapData;
+
+import static org.testng.Assert.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+
+import org.testng.annotations.*;
+
+public class BoxParserTestold {
+	
+	@DataProvider(name = "test1")
+	public Object[][] createData1() {
+	 return new Object[][] {
+		   { "noBoxes1", "{}", "", 0, null },
+		   { "noBoxes2", "\n { \n} \n", " ", new Integer(0), null },
+		   { "oneBox", " { \"1 2 3 4\" } ", " \"1 2 3 4\" ",new Integer(1), new String[]{"1 2 3 4"} },
+		   { "twoBoxes", " { \"1 2 3 4\", \"5 6 7 8\" } ", " \"1 2 3 4\", \"5 6 7 8\" ", new Integer(2), new String[]{"1 2 3 4","5 6 7 8"} },
+		   { "twoBoxesWithBreaks", "\n { \n \"1 2 3 4\"\n, \"5 6\n 7 8\" \n} ", " \"1 2 3 4\", \"5 6 7 8\" ", new Integer(2), new String[]{"1 2 3 4","5 6 7 8"} },
+	 };
+	}
+
+	public InputStream toInputStream(String input) {
+		return new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
+	}
+	
+	@Test(dataProvider = "test1")
+	public void testReadStringBetweenBrackets(String dataName, String input, String boxListbody, Integer numBoxes, String[] boxStrings) {		
+		InputStream in = toInputStream(input);
+		OutputStream out = new ByteArrayOutputStream();
+		BoxParser parser = new BoxParser(in, out);
+		String betweenBrackets = parser.readStringBetweenBrackets();
+		assertEquals(betweenBrackets, boxListbody, "String between brackets");
+	}
+
+	@Test(dataProvider = "test1")
+	public void testParseBoxStrings(String dataName, String input, String boxListbody, Integer numBoxes, String[] boxStrings) {
+		InputStream in = toInputStream(input);
+		OutputStream out = new ByteArrayOutputStream();
+		BoxParser parser = new BoxParser(in, out);
+		String[] actualBoxStrings = parser.parseBoxStrings(boxListbody);
+		assertEquals(actualBoxStrings, boxStrings, "Box strings");		
+	}
+	
+	@Test(dataProvider = "test1")
+	public void testConstructBoxes(String dataName, String input, String boxListbody, Integer numBoxes, String[] boxStrings) {
+		fail("Not yet implemented");
+	}
+	
+	@Test(dataProvider = "test1")
+	public void testReadMap() {
+		fail("Not yet implemented");
+	}
+
+
+	@Test
+	public void testListAreas() {
+		fail("Not yet implemented");
+	}
+
+}
