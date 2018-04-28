@@ -12,19 +12,19 @@ import mapData.Box;
  * @author johnh
  *
  */
-public class HorizontalBoxList extends TreeSet<Box> {
+public class VBPList extends TreeSet<Box> {
 	
-	public HorizontalBoxList(Collection<Box> boxes) {
+	public VBPList(Collection<Box> boxes) {
 		super(new HorizontalBoxComparator());
 		this.addAll(boxes);
 	}
 	
-	public HorizontalBoxList() {
+	public VBPList() {
 		super(new HorizontalBoxComparator());
 	}
 	
-	public HorizontalBoxList verticalFilter(int verticalPos) {
-		HorizontalBoxList matchedBoxes = new HorizontalBoxList();
+	public VBPList verticalFilter(int verticalPos) {
+		VBPList matchedBoxes = new VBPList();
 		// TODO
 		return matchedBoxes;
 	}

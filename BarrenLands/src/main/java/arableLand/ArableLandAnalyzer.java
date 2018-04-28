@@ -1,5 +1,8 @@
 package arableLand;
 
+import java.util.Iterator;
+import arableLand.VerticalBoxPositionList.VBPList;
+import mapData.Box;
 import mapData.LandMap;
 
 /**
@@ -22,39 +25,75 @@ public class ArableLandAnalyzer {
 	}
 	
 	public void Analyze() {
-		cropBarrenLands();
-		orderBarrenLands();
-		generateArableAreas();
+		cropBarrenLands(land);
+		generateArableAreas(land);
 	}
 
-	private void cropBarrenLands() {
+	/**
+	 * Crop barren land boxes to be within the border of the map. 
+	 * Delete a barren land if it is completely outside of the map.
+	 * @param land
+	 */
+	private void cropBarrenLands(LandMap land) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private void orderBarrenLands() {
-		// TODO Auto-generated method stub
-		// sort list of barren land boxes vertically by top and bottom coordinates. Each box has a top 
-		// entry in the list and a bottom entry.
-		VerticalBoxList verticalBoxes = new VerticalBoxList();
-	}
 	
-	public void generateArableAreas() {
+	/* Outline of algorithm		
+	  Find vertical positions of all box top and bottoms, as well as the map top and bottom
+		 for each vertical position found
+		 find horizontal barrenBox list for vertical position
+				
+		 find barrenBoxes that start at this vertical position and add to activebarrenBoxes 
+		 find barrenBoxes that end at this vertical position and remove from activebarrenBoxes
+		 scan activebarrenBoxes from left side to right side to find open area line segments going down
+		   of this is bottom of map, treat as having no empty line segments
+		
+		 compare open area line segments to existing partialBoxes horizontal dimensions
+			 if open area line segment is same as existing partialBox, keep it and don't create new one 
+			 else has different start or end than line segment above, start new partialBox
+				 For all existing partialBoxes that overlap line segment
+					 Join their areas into one
+				 Create new partialArableBox.
+				 add partialArableBox to Area above it.	
+	 */
+	
+	public void generateArableAreas(LandMap land) {
+		// Find vertical positions of all box top and bottoms, as well as the map top and bottom
+		VerticalBoxPositionList verticalPositions = new VerticalBoxPositionList(land);
+
+		// Keep a list of arable boxes that are partially created
+		VBPList partialArableBoxes = new VBPList();
+		
+		// Keep a list of barren boxes that are active at the current position
+		VBPList activeBarrenBoxes = new VBPList();
 		
 		// start at top left corner
-		
-		// list of arable boxes that are partially created
-		HorizontalBoxList partialArableBoxes = new HorizontalBoxList();
-		
-		// Find vertical positions of all box top and bottoms, as well as the map top and bottom
-		// for each vertical position found
-		// find horizontal barrenBox list for vertical position
-		
-		
-		// find barrenBoxes that start at this vertical position and add to activebarrenBoxes 
-		// find barrenBoxes that end at this vertical position and remove from activebarrenBoxes
-		// scan activebarrenBoxes from left side to right side to find open area line segments going down
-		//   of this is bottom of map, treat as having no empty line segments
+		// for each vertical position found, get the boxes with top or bottom at that position
+		Iterator<VerticalBoxPositionList.VBPList> iterator = verticalPositions.getBoxesByVerticalPositionIterator();
+				
+		while(iterator.hasNext()) {
+			VBPList boxesAtPosition = iterator.next();
+			
+			for (VerticalBoxPosition verticalBoxPosition : boxesAtPosition) {			
+
+				if (verticalBoxPosition.isTopOfBarren) {
+					// for barrenBoxes that start at this vertical position and add to activebarrenBoxes 
+					activeBarrenBoxes.add(verticalBoxPosition);
+				} else {
+					// for barrenBoxes that end at this vertical position and remove from activebarrenBoxes
+					activeBarrenBoxes.remove(verticalBoxPosition);
+				}
+			}
+			
+			// scan activebarrenBoxes from left side to right side to find open area line segments going down
+			// If this is bottom of map, treat as having no empty line segments
+			int hPos = 0;
+			for (VerticalBoxPosition verticalBoxPosition : activeBarrenBoxes) {
+				Box box = verticalBoxPosition.getBox();
+				
+			}
 		
 		// compare open area line segments to existing partialBoxes horizontal dimensions
 			// if open area line segment is same as existing partialBox, keep it and don't create new one 
@@ -62,8 +101,11 @@ public class ArableLandAnalyzer {
 				// For all existing partialBoxes that overlap line segment
 					// Join their areas into one
 				// Create new partialArableBox.
-				// add partialArableBox to Area above it.
-		
+				// add partialArableBox to Area above it.	
+		}
 		
 	}
+	
+
+	
 }

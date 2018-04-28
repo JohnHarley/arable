@@ -3,9 +3,11 @@ import java.util.List;
 
 public class LandMap {
 	
-	List<Box> barrenLands;
+	public Box farmBorder = new Box(0, 0, 399, 599); // default farm size 
 	
-	List<Box> arrableLands;
+	public List<Box> barrenLands;
 	
-	List<Area> arrableAreas;
+	public List<Box> arrableLands;
+	
+	public List<Area> arrableAreas;
 }
