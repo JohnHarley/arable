@@ -1,13 +1,12 @@
 package mapData;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LandMap {
 	
-	public Box farmBorder = new Box(0, 0, 399, 599); // default farm size 
+	public Box border = new Box(0, 0, 399, 599); // default farm size 
 	
 	public List<Box> barrenLands;
 	
-	public List<Box> arrableLands;
-	
-	public List<Area> arrableAreas;
+	public List<Shape> arrableAreas = new ArrayList<>();
 }

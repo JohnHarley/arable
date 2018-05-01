@@ -1,7 +1,18 @@
 package mapData;
 
 public class Box {
-	int top, bottom, left, right;
+	private int top, bottom, left, right;
+	private Shape shape;
+	
+	public Shape getShape() {
+		return shape;
+	}
+
+	public void setShape(Shape shape) {
+		this.shape = shape;
+	}
+
+	public Box() {};
 
 	public Box(int bottom, int left, int top, int right) {
 		this.bottom = bottom;
